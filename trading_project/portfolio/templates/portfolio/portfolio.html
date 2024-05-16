@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Portfolio</title>
+</head>
+<body>
+    <h1>Stock Portfolio</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Get Data</button>
+    </form>
+    
+    {% if current_price %}
+        <h2>Current Stock Price: ${{ current_price|floatformat:2 }}</h2>
+    {% endif %}
+
+    {% if chart %}
+        <img src="data:image/png;base64,{{ chart }}" alt="Stock Chart">
+    {% elif error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</body>
+</html>
