@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Transaction History{% endblock %}
+
+{% block content %}
+    <h1>Transaction History</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Transaction Type</th>
+                <th>Stock Symbol</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.transaction_type }}</td>
+                    <td>{{ transaction.stock_symbol }}</td>
+                    <td>{{ transaction.quantity }}</td>
+                    <td>{{ transaction.price }}</td>
+                    <td>{{ transaction.timestamp }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Portfolio Value Fluctuations</h2>
+    <div>
+        {% if chart_data %}
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Portfolio Value Fluctuations">
+        {% else %}
+            <p>No chart available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

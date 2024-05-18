@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "portfolio",
     "accounts",
+    "transactions",
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,5 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGIN_REDIRECT_URL = 'portfolio'
+LOGOUT_REDIRECT_URL = 'login'

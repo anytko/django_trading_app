@@ -12,6 +12,10 @@ from collections import defaultdict
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from collections import defaultdict
+from django.contrib.auth.decorators import login_required
+from transactions.models import Transaction
+from django.utils import timezone
+
 
 def generate_stock_chart(stock_name):
     try:
@@ -49,7 +53,7 @@ def get_current_price(stock_name):
     except Exception as e:
         return None
 
-
+@login_required
 def portfolio(request):
     context = {}
 
@@ -101,6 +105,15 @@ def portfolio(request):
                             total_cost = current_price * quantity
 
                             if total_cost <= portfolio.balance:
+
+                                Transaction.objects.create(
+                                user=request.user,
+                                transaction_type='BUY',
+                                stock_symbol=stock_name,
+                                quantity=quantity,
+                                price=current_price,
+                                timestamp=timezone.now()
+                                )
                                 # Deduct the total cost from the balance
                                 portfolio.balance -= total_cost
                                 portfolio.save()
@@ -147,7 +160,14 @@ def portfolio(request):
                                 if current_price:
                                     # Calculate earnings from selling the specified quantity of shares
                                     earnings = current_price * quantity_to_sell
-
+                                    Transaction.objects.create(
+                                    user=request.user,
+                                    transaction_type='SELL',
+                                    stock_symbol=stock_symbol,
+                                    quantity=quantity_to_sell,
+                                    price=current_price,
+                                    timestamp=timezone.now()
+                                    )
                                     # Update the portfolio and stock instance
                                     portfolio.balance += earnings
                                     stock_instance.quantity -= quantity_to_sell

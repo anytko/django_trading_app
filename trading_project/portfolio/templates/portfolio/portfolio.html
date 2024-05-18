@@ -1,13 +1,8 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
     <div class="container">
         <div class="left">
             <h1>Actions</h1>
@@ -35,10 +30,10 @@
                 </form>
             {% endif %}
             {% if error %}
-                <p>{{ error }}</p>
+                <p style="color: red;">{{ error }}</p>
             {% endif %}
             {% if success_message %}
-                <p>{{ success_message }}</p>
+                <p style="color: green;">{{ success_message }}</p>
             {% endif %}
         </div>
         <div class="right">
@@ -64,9 +59,11 @@
                                 <td>{{ stock.purchase_price|floatformat:2 }}</td>
                                 <td>{{ stock.current_price|floatformat:2 }}</td>
                                 <td>
-                                    <input type="number" name="quantity_to_sell_{{ stock.symbol }}" min="1" value="1">
-                                    <input type="hidden" name="stock_to_sell_{{ stock.symbol }}" value="{{ stock.symbol }}">
-                                    <button type="submit" name="action_sell_{{ stock.symbol }}" value="sell">Sell</button>
+                                    <form method="post" action=".">
+                                        {% csrf_token %}
+                                        <input type="number" name="quantity_to_sell_{{ stock.symbol }}" min="1" max="{{ stock.quantity }}" required>
+                                        <button type="submit" name="action_sell_{{ stock.symbol }}">Sell</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -75,5 +72,4 @@
             </form>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
