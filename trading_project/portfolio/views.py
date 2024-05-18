@@ -3,7 +3,7 @@ import base64
 import matplotlib
 matplotlib.use('Agg')  
 import matplotlib.pyplot as plt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import StockForm, BuyForm
 from accounts.models import Portfolio, Stock
 import yfinance as yf
@@ -223,3 +223,21 @@ def portfolio(request):
     context['buy_form'] = buy_form
 
     return render(request, 'portfolio/portfolio.html', context)
+
+
+
+def reset_account(request):
+    user = request.user
+    initial_balance = 10000  # Set this to your desired initial balance
+
+    # Delete all transactions for the user
+    Transaction.objects.filter(user=user).delete()
+
+    # Reset portfolio balance and delete all stocks
+    portfolio, _ = Portfolio.objects.get_or_create(user=user)
+    portfolio.balance = initial_balance
+    portfolio.save()
+
+    Stock.objects.filter(portfolio=portfolio).delete()
+
+    return redirect('portfolio')
