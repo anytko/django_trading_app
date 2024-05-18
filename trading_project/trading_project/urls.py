@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from accounts import urls as accounts_urls  # Import the URLs module from the accounts app
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
     path('portfolio/', include('portfolio.urls')),
-] 
+    path('signup/', include(accounts_urls)),  # Include the URLs module for the accounts app
+
+]
 
 

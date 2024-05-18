@@ -1,24 +1,79 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Stock Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <h1>Stock Portfolio</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Get Data</button>
-    </form>
-    
-    {% if current_price %}
-        <h2>Current Stock Price: ${{ current_price|floatformat:2 }}</h2>
-    {% endif %}
-
-    {% if chart %}
-        <img src="data:image/png;base64,{{ chart }}" alt="Stock Chart">
-    {% elif error %}
-        <p>{{ error }}</p>
-    {% endif %}
+    <div class="container">
+        <div class="left">
+            <h1>Actions</h1>
+            <!-- Place your search form, chart, and buy section here -->
+            <p>Current Balance: ${{ portfolio.balance|floatformat:2 }}</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ stock_form.as_p }}
+                <button type="submit" name="action" value="check_price">Check Price</button>
+            </form>
+            {% if current_price %}
+                <p>Current Price: ${{ current_price|floatformat:2 }}</p>
+            {% endif %}
+            {% if chart %}
+                <img src="data:image/png;base64,{{ chart }}" alt="Stock Chart">
+            {% endif %}
+            {% if current_price %}
+                <h2>Buy Shares of {{ stock_form.stock_name.value }}</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ buy_form.as_p }}
+                    <input type="hidden" name="action" value="buy">
+                    <input type="hidden" name="stock_name" value="{{ stock_form.stock_name.value }}">
+                    <button type="submit">Buy Shares</button>
+                </form>
+            {% endif %}
+            {% if error %}
+                <p>{{ error }}</p>
+            {% endif %}
+            {% if success_message %}
+                <p>{{ success_message }}</p>
+            {% endif %}
+        </div>
+        <div class="right">
+            <h1>User's Stock Portfolio</h1>
+            <!-- Place your stock portfolio table here -->
+            <form method="post" action="{% url 'portfolio' %}">
+                {% csrf_token %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Quantity</th>
+                            <th>Purchase Price</th>
+                            <th>Current Price</th>
+                            <th>Sell Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in aggregated_stocks %}
+                            <tr>
+                                <td>{{ stock.symbol }}</td>
+                                <td>{{ stock.quantity }}</td>
+                                <td>{{ stock.purchase_price|floatformat:2 }}</td>
+                                <td>{{ stock.current_price|floatformat:2 }}</td>
+                                <td>
+                                    <input type="number" name="quantity_to_sell_{{ stock.symbol }}" min="1" value="1">
+                                    <input type="hidden" name="stock_to_sell_{{ stock.symbol }}" value="{{ stock.symbol }}">
+                                    <button type="submit" name="action_sell_{{ stock.symbol }}" value="sell">Sell</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
