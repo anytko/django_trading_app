@@ -66,10 +66,8 @@ def generate_transaction_chart(request):
             # Calculate the total stock value for the current date
             total_stock_value = sum(stock.current_price * stock.quantity for stock in portfolio.stock_set.all() if stock.current_price is not None and stock.quantity is not None)
 
-            # Check if the date is the current day
-            if date == timezone.now().date():
-                # Calculate the portfolio value for the current day dynamically based on real-time updates
-                current_portfolio_value = total_stock_value
+            # Calculate the portfolio value for the current day
+            current_portfolio_value = total_stock_value + portfolio.balance
 
             # Append the portfolio value for the current day
             portfolio_values.append(current_portfolio_value)
