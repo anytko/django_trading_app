@@ -1,2 +1,7 @@
+#!/bin/bash
+
+# Install required dependencies
 pip install -r requirements.txt
-python3.11.5 manage.py collectstatic
+
+# Run Django management commands
+python manage.py collectstatic --noinput
