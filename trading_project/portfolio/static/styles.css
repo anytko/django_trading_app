@@ -178,3 +178,8 @@ nav ul li form {
 .portfolio-table td {
     padding: 8px; /* Adjust the padding as needed */
 }
+
+.transaction-table th,
+.transaction-table td {
+    padding: 11px; /* Adjust the padding as needed */
+}

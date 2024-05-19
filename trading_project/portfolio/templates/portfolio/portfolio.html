@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <div class="left">
-            <h1>Actions</h1>
+            <h1>Search Stocks</h1>
             <p>Current Balance: ${{ portfolio.balance|floatformat:2 }}</p>
             <form method="post">
                 {% csrf_token %}
@@ -36,7 +36,7 @@
             {% endif %}
         </div>
         <div class="right">
-            <h1>User's Stock Portfolio</h1>
+            <h1>Stock Portfolio</h1>
             <form method="post" action="{% url 'portfolio' %}">
                 {% csrf_token %}
                 <table class="portfolio-table">
