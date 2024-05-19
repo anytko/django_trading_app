@@ -6,7 +6,6 @@
     <div class="container">
         <div class="left">
             <h1>Actions</h1>
-            <!-- Place your search form, chart, and buy section here -->
             <p>Current Balance: ${{ portfolio.balance|floatformat:2 }}</p>
             <form method="post">
                 {% csrf_token %}
@@ -38,10 +37,9 @@
         </div>
         <div class="right">
             <h1>User's Stock Portfolio</h1>
-            <!-- Place your stock portfolio table here -->
             <form method="post" action="{% url 'portfolio' %}">
                 {% csrf_token %}
-                <table>
+                <table class="portfolio-table">
                     <thead>
                         <tr>
                             <th>Symbol</th>

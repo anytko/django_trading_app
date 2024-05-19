@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from decimal import Decimal
+import yfinance as yf
+import logging
 
 class Portfolio(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -49,13 +51,14 @@ class Stock(models.Model):
     current_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def update_current_price(self):
-        # Fetch the current price for this stock symbol from an external source (e.g., API)
         try:
-            # Example: Fetch current price using yfinance library
+            # Fetch current price using yfinance library
             stock = yf.Ticker(self.symbol)
             current_data = stock.history(period='1d')
-            self.current_price = Decimal(str(current_data['Close'][0]))  # Convert to Decimal
+            current_price = Decimal(str(current_data['Close'][0]))  # Convert to Decimal
+            self.current_price = current_price
             self.save()
+            logging.info(f"Successfully updated current price for {self.symbol}. Current price: {current_price}")
         except Exception as e:
-            # Handle exceptions appropriately (e.g., log error)
-            print(f"Error updating current price for {self.symbol}: {e}")
+            # Log error and handle exceptions appropriately
+            logging.error(f"Error updating current price for {self.symbol}: {e}")
