@@ -11,6 +11,13 @@
     ],
     "routes": [
         {
+            "src": "/",
+            "status": 302,
+            "headers": {
+                "Location": "/accounts/login/"
+            }
+        },
+        {
             "src": "/(.*)",
             "dest": "trading_project/wsgi.py"
         }
