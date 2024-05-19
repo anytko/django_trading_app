@@ -1,4 +1,8 @@
 {
+    "framework": {
+      "name": "@vercel/python",
+      "version": "3.11.5"
+    },
     "builds": [{
       "src": "trading_project/wsgi.py",
       "use": "@vercel/python",
