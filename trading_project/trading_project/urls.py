@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from accounts import urls as accounts_urls  # Import the URLs module from the accounts app
 from transactions import urls as transactions_urls
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path('signup/', include(accounts_urls)),  # Include the URLs module for the accounts app
     path('', include('django.contrib.auth.urls')),
     path('transactions/', include(transactions_urls)),
+    path('', RedirectView.as_view(url='/login/')),
 
 ]
 
