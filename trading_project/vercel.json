@@ -1,25 +1,16 @@
 {
-    "builds": [
-        {
-            "src": "trading_project/wsgi.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb",
-                "runtime": "python3.9"
-            }
-        }
-    ],
+    "builds": [{
+      "src": "trading_project/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.11.5"
+      }
+    }],
     "routes": [
-        {
-            "src": "/",
-            "status": 302,
-            "headers": {
-                "Location": "/accounts/login/"
-            }
-        },
-        {
-            "src": "/(.*)",
-            "dest": "trading_project/wsgi.py"
-        }
+      {
+        "src": "/(.*)",
+        "dest": "trading_project/wsgi.py"
+      }
     ]
-}
+  }
