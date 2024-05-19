@@ -18,5 +18,9 @@
         "src": "/(.*)",
         "dest": "trading_project/wsgi.py"
       }
+    ],
+    "rewrites": [
+      { "source": "/login", "destination": "/login.html" }
     ]
   }
+  
